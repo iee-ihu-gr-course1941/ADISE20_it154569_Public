@@ -16,29 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `empty_board`
+-- Table structure for table `board_empty`
 --
 
-DROP TABLE IF EXISTS `empty_board`;
+DROP TABLE IF EXISTS `board_empty`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `empty_board` (
+CREATE TABLE `board_empty` (
   `x` tinyint(1) NOT NULL,
   `y` tinyint(1) NOT NULL,
-  `b_color` enum('B','W') NOT NULL,
-  `piece_color` enum('W','B') DEFAULT NULL,
-  `piece` enum('K','Q','R','B','N','P') DEFAULT NULL,
+  `piece_color` enum('B','Y') DEFAULT NULL,
   PRIMARY KEY (`x`,`y`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `empty_board`
+-- Dumping data for table `board_empty`
 --
 
-LOCK TABLES `empty_board` WRITE;
-/*!40000 ALTER TABLE `empty_board` DISABLE KEYS */;
-/*!40000 ALTER TABLE `empty_board` ENABLE KEYS */;
+LOCK TABLES `board_empty` WRITE;
+/*!40000 ALTER TABLE `board_empty` DISABLE KEYS */;
+/*!40000 ALTER TABLE `board_empty` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-04  0:41:30
+-- Dump completed on 2020-12-04  0:48:49
