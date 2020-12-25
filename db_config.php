@@ -1,6 +1,7 @@
 <?php
 $host = "127.0.0.1";
 $db = "ADISE2020_db";
+require_once "config_local.php";
 
 $user = "root";
 $pass = "19977991AnyonE!";
