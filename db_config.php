@@ -9,7 +9,7 @@ $pass = "19977991AnyonE!";
 if (gethostname() == 'users.iee.ihu.gr') {
     $mysqli = new mysqli($host, $user, $pass, $db, null, '/home/student/it/2015/it154569/mysql/run/mysql.sock');
 } else {
-    $mysqli = new mysqli($host, $user, $pass, $db, "3333");
+    $mysqli = new mysqli($host, $user, $pass, $db);
 }
 
 if ($mysqli->connect_errno) {
