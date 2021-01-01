@@ -1,9 +1,9 @@
 <?php
-$host = "127.0.0.1";
-$db = "ADISE2020_db";
+$host = '127.0.0.1';
+$db = 'ADISE2020_db';
 
-$user = "root";
-$pass = "19977991AnyonE!";
+$user = 'root';
+$pass = '19977991AnyonE!';
 
 
 if (gethostname() == 'users.iee.ihu.gr') {
