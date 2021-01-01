@@ -41,31 +41,6 @@ INSERT INTO `board` VALUES (1,1,NULL),(1,2,NULL),(1,3,NULL),(1,4,NULL),(1,5,NULL
 UNLOCK TABLES;
 
 --
--- Table structure for table `board_empty`
---
-
-DROP TABLE IF EXISTS `board_empty`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `board_empty` (
-  `x` tinyint(1) NOT NULL,
-  `y` tinyint(1) NOT NULL,
-  `piece_color` enum('B','Y') DEFAULT NULL,
-  PRIMARY KEY (`x`,`y`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `board_empty`
---
-
-LOCK TABLES `board_empty` WRITE;
-/*!40000 ALTER TABLE `board_empty` DISABLE KEYS */;
-INSERT INTO `board_empty` VALUES (1,1,NULL),(1,2,NULL),(1,3,NULL),(1,4,NULL),(1,5,NULL),(1,6,NULL),(1,7,NULL),(2,1,NULL),(2,2,NULL),(2,3,NULL),(2,4,NULL),(2,5,NULL),(2,6,NULL),(2,7,NULL),(3,1,NULL),(3,2,NULL),(3,3,NULL),(3,4,NULL),(3,5,NULL),(3,6,NULL),(3,7,NULL),(4,1,NULL),(4,2,NULL),(4,3,NULL),(4,4,NULL),(4,5,NULL),(4,6,NULL),(4,7,NULL),(5,1,NULL),(5,2,NULL),(5,3,NULL),(5,4,NULL),(5,5,NULL),(5,6,NULL),(5,7,NULL),(6,1,NULL),(6,2,NULL),(6,3,NULL),(6,4,NULL),(6,5,NULL),(6,6,NULL),(6,7,NULL);
-/*!40000 ALTER TABLE `board_empty` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `game_status`
 --
 
@@ -73,10 +48,10 @@ DROP TABLE IF EXISTS `game_status`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `game_status` (
-  `status` enum('not active','initialized','started','ended','aborded') NOT NULL DEFAULT 'not active',
+  `status` enum('not active','initialized','started','ended','aborted') NOT NULL DEFAULT 'not active',
   `p_turn` enum('B','Y') DEFAULT NULL,
   `result` enum('Y','B','D') DEFAULT NULL,
-  `last_change` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `last_change` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -86,7 +61,7 @@ CREATE TABLE `game_status` (
 
 LOCK TABLES `game_status` WRITE;
 /*!40000 ALTER TABLE `game_status` DISABLE KEYS */;
-INSERT INTO `game_status` VALUES ('aborded',NULL,NULL,'2020-12-20 15:02:03');
+INSERT INTO `game_status` VALUES ('not active',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `game_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -101,7 +76,8 @@ CREATE TABLE `players` (
   `nickname` varchar(20) DEFAULT NULL,
   `pawn_color` enum('B','Y') NOT NULL,
   `token` varchar(64) DEFAULT NULL,
-  `last_change` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `last_change` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY `nickname` (`nickname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -111,7 +87,6 @@ CREATE TABLE `players` (
 
 LOCK TABLES `players` WRITE;
 /*!40000 ALTER TABLE `players` DISABLE KEYS */;
-INSERT INTO `players` VALUES (NULL,'B',NULL,'2020-12-20 15:03:50'),(NULL,'Y',NULL,'2020-12-20 15:03:50');
 /*!40000 ALTER TABLE `players` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -124,4 +99,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-20 17:26:54
+-- Dump completed on 2021-01-01 22:32:26
