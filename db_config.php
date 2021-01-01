@@ -1,5 +1,5 @@
 <?php
-$host = '127.0.0.1';
+$host = 'localhost';
 $db = 'ADISE2020_db';
 
 $user = 'root';
