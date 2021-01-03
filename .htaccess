@@ -1,12 +1,7 @@
-IndexIgnore * # prevent directory listing
-
-Order deny,allow
-Allow from *
-
-# ------------------------------------------
-# Rewrite so that php extentions are not shown
-RewriteEngine on
-
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}\.php -f
-RewriteRule ^(.*)$ $1.php
+<Limit GET POST PUT>
+# Deprecated apache 2.2 syntax:
+# Order Allow,Deny
+# Allow from all
+# Apache > 2.4 requires:
+Require all granted
+</Limit>
