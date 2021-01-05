@@ -268,7 +268,7 @@ function checkActiveGameStatus()
 {
     $gameWinnerOrDraw = checkGameWinnerOrDraw();
 
-    if (checkGameWinnerOrDraw() != "playing") {
+    if ($gameWinnerOrDraw != "playing") {
         return $gameWinnerOrDraw;
     } elseif (checkAborted()) {
         return "aborted";
