@@ -33,7 +33,7 @@ if ($method == "POST") {
 
 } elseif ($method == "PUT") {
     $json_data = json_decode(file_get_contents('php://input'), true);
-    if (isset($json_data["token"])) {
+    if (isset($json_data["token"]) && isset($json_data["move"])) {
         if ($json_data["token"] != null && $json_data["move"] != null) {
             $player_token = $json_data["token"];
             $attemptingPlayer = getUserFromToken($player_token);
@@ -52,6 +52,8 @@ if ($method == "POST") {
 
 
                         if ($validRow != null) {
+                            $move = intval($move);
+
                             doMove($validRow, $move, $currentPlayerColor);
 
                             $response = array("posX" => $validRow, "posY" => $move);
@@ -60,9 +62,9 @@ if ($method == "POST") {
                             $opponentColor = getOpponentColor($currentPlayerColor);
 
 
-                            $gameStatus = checkActiveGameStatus();
-
                             updateTurn($opponentColor);
+
+                            $gameStatus = checkActiveGameStatus();
 
 
                             updateGameStatus($gameStatus);
@@ -221,9 +223,12 @@ function getCurrentPlayerColor()
 
 function isMoveValid($move)
 {
-    if (!is_int($move)) {
+
+    if (!is_string($move)) {
         return null;
     }
+
+    $move = intval($move);
 
     if ($move < 1 || $move > 8) {
         return null;
@@ -268,7 +273,7 @@ function checkActiveGameStatus()
 {
     $gameWinnerOrDraw = checkGameWinnerOrDraw();
 
-    if ($gameWinnerOrDraw != "playing") {
+    if (checkGameWinnerOrDraw() != "playing") {
         return $gameWinnerOrDraw;
     } elseif (checkAborted()) {
         return "aborted";
@@ -321,53 +326,78 @@ function updateGameStatus($gameStatus)
 function checkHorizontalWinner()
 {
     $board = getBoard();
-    $color = getCurrentPlayerColor();
+    for ($i = 1; $i < 7; $i++) {
 
-    for ($j = 1; $j <= 4; $j++) {
-        for ($i = 1; $i <= 6; $i++) {
-            if ($board[$i][$j] == $color && $board[$i][$j + 1] == $color && $board[$i][$j + 2] == $color && $board[$i][$j + 3] == $color) {
-                return $color;
-            }
+        //CHECK IF BLUE IS WINNER HORIZONTALLY
+        if ($board[$i][1] == 'B' && $board[$i][2] == 'B' && $board[$i][3] == 'B' && $board[$i][4] == 'B') {
+            return 'B';
+        }
+        if ($board[$i][2] == 'B' && $board[$i][3] == 'B' && $board[$i][4] == 'B' && $board[$i][5] == 'B') {
+            return 'B';
+        }
+        if ($board[$i][3] == 'B' && $board[$i][4] == 'B' && $board[$i][5] == 'B' && $board[$i][6] == 'B') {
+            return 'B';
+        }
+        if ($board[$i][4] == 'B' && $board[$i][5] == 'B' && $board[$i][6] == 'B' && $board[$i][7] == 'B') {
+            return 'B';
+        }
+
+        //CHECK IF YELLOW IS WINNER HORIZONTALLY
+        if ($board[$i][1] == 'Y' && $board[$i][2] == 'Y' && $board[$i][3] == 'Y' && $board[$i][4] == 'Y') {
+            return 'Y';
+        }
+        if ($board[$i][2] == 'y' && $board[$i][3] == 'Y' && $board[$i][4] == 'Y' && $board[$i][5] == 'Y') {
+            return 'Y';
+        }
+        if ($board[$i][3] == 'Y' && $board[$i][4] == 'Y' && $board[$i][5] == 'Y' && $board[$i][6] == 'Y') {
+            return 'Y';
+        }
+        if ($board[$i][4] == 'Y' && $board[$i][5] == 'Y' && $board[$i][6] == 'Y' && $board[$i][7] == 'Y') {
+            return 'Y';
         }
     }
     return null;
 }
+
 
 function checkVerticalWinner()
 {
     $board = getBoard();
-    $color = getCurrentPlayerColor();
-    for ($i = 1; $i <= 3; $i++) {
-        for ($j = 1; $j <= 7; $j++) {
-            if ($board[$i][$j] == $color && $board[$i + 1][$j] == $color && $board[$i + 2][$j] == $color && $board[$i + 3][$j] == $color) {
-                return $color;
-            }
+
+    for ($j = 1; $j < 8; $j++) {
+
+        //CHECK IF BLUE IS WINNER VERTICALLY
+        if ($board[1][$j] == 'B' && $board[2][$j] == 'B' && $board[3][$j] == 'B' && $board[4][$j] == 'B') {
+            return 'B';
         }
+        if ($board[2][$j] == 'B' && $board[3][$j] == 'B' && $board[4][$j] == 'B' && $board[5][$j] == 'B') {
+            return 'B';
+        }
+        if ($board[3][$j] == 'B' && $board[4][$j] == 'B' && $board[5][$j] == 'B' && $board[6][$j] == 'B') {
+            return 'B';
+        }
+
+
+        //CHECK IF BLUE IS WINNER VERTICALLY
+        if ($board[1][$j] == 'Y' && $board[2][$j] == 'Y' && $board[3][$j] == 'Y' && $board[4][$j] == 'Y') {
+            return 'Y';
+        }
+        if ($board[2][$j] == 'Y' && $board[3][$j] == 'Y' && $board[4][$j] == 'Y' && $board[5][$j] == 'Y') {
+            return 'Y';
+        }
+        if ($board[3][$j] == 'Y' && $board[4][$j] == 'Y' && $board[5][$j] == 'Y' && $board[6][$j] == 'Y') {
+            return 'Y';
+        }
+
     }
     return null;
 }
 
+
 function checkDiagonalWinner()
 {
     $board = getBoard();
-    $color = getCurrentPlayerColor();
-//positive slops	/
-    for ($j = 1; $j <= 4; $j++) {
-        for ($i = 1; $i <= 3; $i++) {
-            if ($board[$i][$j] == $color && $board[$i + 1][$j + 1] == $color && $board[$i + 2][$j + 2] == $color && $board[$i + 3][$j + 3] == $color) {
-                return $color;
-            }
-        }
-    }
 
-//negative slops	\
-    for ($j = 1; $j <= 4; $j++) {
-        for ($i = 4; $i <= 6; $i++) {
-            if ($board[$i][$j] == $color && $board[$i - 1][$j + 1] == $color && $board[$i - 2][$j + 2] == $color && $board[$i - 3][$j + 3] == $color) {
-                return $color;
-            }
-        }
-    }
     return null;
 }
 
