@@ -52,9 +52,6 @@ if ($method == "POST") {
 
 
                         if ($validRow != null) {
-
-                            $move = intval($move);
-
                             doMove($validRow, $move, $currentPlayerColor);
 
                             $response = array("posX" => $validRow, "posY" => $move);
@@ -224,12 +221,9 @@ function getCurrentPlayerColor()
 
 function isMoveValid($move)
 {
-
-    if (!is_string($move)) {
+    if (!is_int($move)) {
         return null;
     }
-
-    $move = intval($move);
 
     if ($move < 1 || $move > 8) {
         return null;
@@ -242,7 +236,10 @@ function isMoveValid($move)
             return $i;
         }
     }
+
+    return null;
 }
+
 
 function doMove($x, $move, $color)
 {
@@ -271,7 +268,7 @@ function checkActiveGameStatus()
 {
     $gameWinnerOrDraw = checkGameWinnerOrDraw();
 
-    if (checkGameWinnerOrDraw() != "playing") {
+    if ($gameWinnerOrDraw != "playing") {
         return $gameWinnerOrDraw;
     } elseif (checkAborted()) {
         return "aborted";
@@ -464,6 +461,3 @@ function showBoard()
     header('Content-type: application/json');
     print(json_encode(getBoard(), JSON_PRETTY_PRINT));
 }
-
-
-
