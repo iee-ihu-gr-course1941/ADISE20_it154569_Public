@@ -242,7 +242,7 @@ function isMoveValid($move)
             return $i;
         }
     }
-
+}
 
 function doMove($x, $move, $color)
 {
