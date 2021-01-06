@@ -33,7 +33,8 @@ if ($method == "POST") {
 
 } elseif ($method == "PUT") {
     $json_data = json_decode(file_get_contents('php://input'), true);
-    if (isset($json_data["token"])) {
+
+    if (isset($json_data["token"]) && isset($json_data["move"])) {
         if ($json_data["token"] != null && $json_data["move"] != null) {
             $player_token = $json_data["token"];
             $attemptingPlayer = getUserFromToken($player_token);
@@ -52,6 +53,9 @@ if ($method == "POST") {
 
 
                         if ($validRow != null) {
+
+                            $move = intval($move);
+
                             doMove($validRow, $move, $currentPlayerColor);
 
                             $response = array("posX" => $validRow, "posY" => $move);
@@ -110,16 +114,20 @@ if ($method == "POST") {
         } else {
             http_response_code(400);
             header('Content-type: application/json');
-            echo json_encode(array("error" => "Token is empty"));
+            if($json_data["token"]==null){
+                echo json_encode(array("error" => "Token is empty"));
+            }else{
+                echo json_encode(array("error" => "Move is empty"));
+            }
         }
     } else {
         http_response_code(400);
         header('Content-type: application/json');
 
-        if ($json_data["token"] == null) {
-            echo json_encode(array("error" => "token key not found JSON"));
+        if (!isset($json_data["token"]) || $json_data["token"] == null) {
+            echo json_encode(array("error" => "token key not found in JSON"));
         } else {
-            echo json_encode(array("error" => "move key not found JSON"));
+            echo json_encode(array("error" => "move key not found in JSON"));
         }
     }
 
@@ -221,9 +229,12 @@ function getCurrentPlayerColor()
 
 function isMoveValid($move)
 {
-    if (!is_int($move)) {
+
+    if (!is_string($move)) {
         return null;
     }
+
+    $move = intval($move);
 
     if ($move < 1 || $move > 8) {
         return null;
@@ -268,7 +279,7 @@ function checkActiveGameStatus()
 {
     $gameWinnerOrDraw = checkGameWinnerOrDraw();
 
-    if ($gameWinnerOrDraw != "playing") {
+    if (checkGameWinnerOrDraw() != "playing") {
         return $gameWinnerOrDraw;
     } elseif (checkAborted()) {
         return "aborted";
@@ -461,3 +472,5 @@ function showBoard()
     header('Content-type: application/json');
     print(json_encode(getBoard(), JSON_PRETTY_PRINT));
 }
+
+
